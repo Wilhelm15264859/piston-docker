@@ -15,4 +15,4 @@ RUN npm ci --only=production || npm install --only=production
 COPY config.yaml /app/config.yaml
 
 ENV PORT=2000
-CMD ["node", "index.js"]
+CMD ["node", "api/index.js"]
