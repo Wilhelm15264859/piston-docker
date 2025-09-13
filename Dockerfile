@@ -1,18 +1,16 @@
 FROM node:18-alpine
 
 RUN apk add --no-cache git python3 make g++ bash
-
 WORKDIR /app
 
-# Клонируем репозиторий и копируем всё содержимое в /app
-RUN git clone --depth=1 https://github.com/engineer-man/piston /src \
-    && cp -r /src/* /app \
-    && rm -rf /src
+# Клонируем ТОЛЬКО API
+RUN git clone --depth=1 https://github.com/engineer-man/piston-api /app
 
+# Ставим прод-зависимости
 RUN npm ci --only=production || npm install --only=production
 
-# Конфиг для Railway (sandbox в /tmp)
+# Конфиг: sandbox в /tmp (Railway разрешает)
 COPY config.yaml /app/config.yaml
 
 ENV PORT=2000
-CMD ["node", "api/index.js"]
+CMD ["node", "index.js"]
